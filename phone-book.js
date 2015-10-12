@@ -5,11 +5,11 @@ var phoneBook=[];
    Функция добавления записи в телефонной книге.
 */
 module.exports.add = function add(name, phone, email) {
- if (validNumber(phone)&& validEmail(email))
-    {phoneBook[phoneBook.length] = { name: name, phone: phone, email:email};
-    return console.log('Контакт добавлен');}
-else
-   {return console.log('Контакт не добавлен, данные введены не корректно');}};
+    if (validNumber(phone)&& validEmail(email))
+        {phoneBook[phoneBook.length] = { name: name, phone: phone, email:email};
+        return console.log('Контакт добавлен');}
+    else
+       {return console.log('Контакт не добавлен, данные введены не корректно');}};
 /*
    Функция проверки на валидность номера в телефонной книге.
 */
@@ -27,14 +27,15 @@ function validEmail(email)
    Функция поиска записи в телефонной книге.
 */
 module.exports.find = function find(query) {
-  var index= findElem(query);
-     if (query === '')
-       { i=0;
-        while (i<phoneBook.length) 
-            {var elem = phoneBook[i];
-             console.log(elem.name , elem.phone, elem.email);
-             i++;}}
-     else
+var index= findElem(query);
+    if (query === ''|| typeof(query)==='undefined')
+       { var i=0;
+            while (i<phoneBook.length) 
+                {var elem = phoneBook[i];
+                console.log(elem.name , elem.phone, elem.email);
+                i++;}
+	    }
+    else
         if (index.length === 0)
             {console.log('ничего не найдено')}
         else
@@ -42,22 +43,23 @@ module.exports.find = function find(query) {
             while (i<index.length)
                {var elem = phoneBook[index[i]];
                console.log(elem.name , elem.phone, elem.email);
-               i++;}}
+               i++;}
+			}
   return index;
 };
 
 
 function findElem(query)
 {var index = [];
-  for (var i = 0; i < phoneBook.length; i++) {
-       var element = phoneBook[i];
+    for (var i = 0; i < phoneBook.length; i++) {
+        var element = phoneBook[i];
         if (element.name.indexOf(query) >= 0 ||
             element.phone.indexOf(query) >= 0 ||
-            element.email.indexOf(query) >= 0) {
-            index.push(i);
+            element.email.indexOf(query) >= 0) 
+		{
+        index.push(i);
         }
     }
-    return index;
 return index;};
 /*
    Функция удаления записи в телефонной книге.
@@ -65,16 +67,18 @@ return index;};
 module.exports.remove =function remove(query) {
 var index= findElem(query);
     if (query === '')
-         { console.log ('Вы ничего не введи');}
+        { console.log ('Вы ничего не введи');}
     else
-    if (index.length === 0)
-        {console.log('По запросу ничего не найдено')}
-    {i=0;
-    while (i<index.length)
-        {element = phoneBook[index[i]];
-        console.log(element.name,'удален');
-        phoneBook.splice(index[i],1);
-        i++;}}
+        if (index.length === 0)
+            {console.log('По запросу ничего не найдено')}
+		else
+           {i=0;
+           while (i<index.length)
+               {element = phoneBook[index[i]];
+               console.log(element.name,'удален');
+               phoneBook.splice(index[i],1);
+               i++;}
+			}
 return index;
 };
 
