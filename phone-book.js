@@ -6,7 +6,7 @@ var phoneBook=[];
 */
 module.exports.add = function add(name, phone, email) {
     if (validNumber(phone)&& validEmail(email))
-        {phoneBook[phoneBook.length] = { name: name, phone: phone, email:email};
+        {phoneBook[phoneBook.length] = { name: name, phone: formattingPhone(phone), email:email};
         return console.log('Контакт добавлен');}
     else
        {return console.log('Контакт не добавлен, данные введены не корректно');}};
@@ -15,14 +15,15 @@ module.exports.add = function add(name, phone, email) {
 */
 
 function validNumber(phone)
-    {var valid1 = /^\+?\d{0,2}\s?\(?\d{3}\)?\s?\d{3}\s?\-?\d\s?\-?\d{3}$/;
-    return valid1.test(phone);};
+    {var valid1 = /^\+?\d{0,2}\s?\d{3}\s?\d{3}\s?\-?\d\s?\-?\d{3}$/;
+	 var valid2 = /^\+?\d{0,2}\s?\(\d{3}\)\s?\d{3}\s?\-?\d\s?\-?\d{3}$/;
+ return  (valid1.test(phone)||valid2.test(phone));};
 /*
    Функция проверки на валидность email в телефонной книге.
 */
 function validEmail(email)
-    {var valid2 = /^[\w.]+@[\w]+\.[a-z]{2,3}$/i;
-    return valid2.test(email);};
+    {var valid3 = /^[\w.]+@[\w]+\.[a-z]{2,3}$/i;
+    return valid3.test(email);};
 /*
    Функция поиска записи в телефонной книге.
 */
@@ -32,7 +33,7 @@ var index= findElem(query);
        { var i=0;
             while (i<phoneBook.length) 
                 {var elem = phoneBook[i];
-                console.log(elem.name , elem.phone, elem.email);
+                console.log(elem.name ,',', elem.phone, ',',elem.email);
                 i++;}
 	    }
     else
@@ -42,7 +43,7 @@ var index= findElem(query);
             {i=0;
             while (i<index.length)
                {var elem = phoneBook[index[i]];
-               console.log(elem.name , elem.phone, elem.email);
+               console.log(elem.name ,',', elem.phone,',', elem.email);
                i++;}
 			}
   return index;
@@ -67,7 +68,7 @@ return index;};
 module.exports.remove =function remove(query) {
 var index= findElem(query);
     if (query === '')
-        { console.log ('Вы ничего не введи');}
+        { console.log ('Вы ничего не ввели');}
     else
         if (index.length === 0)
             {console.log('По запросу ничего не найдено')}
@@ -80,6 +81,22 @@ var index= findElem(query);
                i++;}
 			}
 return index;
+};
+   /* Форматирование номеров*/
+   
+function formattingPhone(phone)
+{
+   var lstNumberOfPhone = (phone.match(/\d/g));
+        if (lstNumberOfPhone.length === 11)
+           {var newPhone='+* (***) ***-*-***';
+           for (var i=0;i < 11;i++)
+              { newPhone=newPhone.replace(/\*/,lstNumberOfPhone[i]);}
+           return newPhone;}
+        else
+           {var newPhone='+** (***) ***-*-***';
+              for (var i=0;i < 12;i++)
+		         {newPhone=newPhone.replace(/\*/,lstNumberOfPhone[i]);}
+             return newPhone;}
 };
 
 /*
